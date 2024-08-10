@@ -52,7 +52,7 @@ Before running the application, ensure you have the following installed:
    python model.py
    ```
 
-2. **Access the application**:
+2. **Accessing the application**:
 
    Open your web browser and go to `http://127.0.0.1:5000/`.
 
