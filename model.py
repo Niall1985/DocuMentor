@@ -1,3 +1,4 @@
+from flask import Flask, request, render_template, redirect, url_for
 import fitz
 from nltk.corpus import stopwords, wordnet
 from nltk.tokenize import word_tokenize, sent_tokenize
@@ -5,6 +6,10 @@ import nltk
 import string
 from nltk.stem import WordNetLemmatizer
 
+# Initialize Flask application
+app = Flask(__name__)
+
+# Download NLTK resources
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
@@ -32,13 +37,13 @@ def query_processor_function(query):
         if word not in string.punctuation:
             if word.lower() not in stopword:
                 pos = get_wordnet_tag(wordtag)
-                lemmatized_Word = lemmatizer.lemmatize(word,pos)
+                lemmatized_Word = lemmatizer.lemmatize(word, pos)
                 filtered_words.append(lemmatized_Word)
     return filtered_words
 
-def text_extracting_function(pdf_path):
+def text_extracting_function(pdf):
     text = ""
-    doc = fitz.open(pdf_path)
+    doc = fitz.open(stream=pdf.read(), filetype="pdf")
     for page in doc:
         text += page.get_text()
     return text
@@ -52,21 +57,21 @@ def query_check_function(text, query_process):
             relevant_Sentence.append(sent)
     return relevant_Sentence
 
-def main():
-    pdf_path = "data.pdf"
-    query = input("Enter a query: ").lower()
-    query_process = query_processor_function(query)
-    text_extract = text_extracting_function(pdf_path)
-
-    relevant_info = query_check_function(text_extract, query_process)
-
-    if relevant_info:
-        print("\nRelevant content for the Query:")
-        for content in relevant_info:
-            print(content)
-    else:
-        print("No relevant content found.")
-
+@app.route('/', methods=['GET', 'POST'])
+def upload_file():
+    if request.method == 'POST':
+        if 'file' not in request.files:
+            return redirect(request.url)
+        file = request.files['file']
+        if file.filename == '':
+            return redirect(request.url)
+        if file and file.filename.lower().endswith('.pdf'):
+            query = request.form.get('query', '').lower()
+            text_extract = text_extracting_function(file)
+            query_process = query_processor_function(query)
+            relevant_info = query_check_function(text_extract, query_process)
+            return render_template('upload.html', results=relevant_info)
+    return render_template('upload.html')
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)

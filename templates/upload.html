@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload PDF</title>
+    <style>
+        .container {
+            width: 80%;
+            margin-top:7%;
+            margin-left:5%;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            font-size: 40px;
+        }
+        .results {
+            margin-top: 20px;
+        }
+        .result-item {
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class = "container">
+    <h1>Upload PDF and Enter Query</h1>
+    <form action="/" method="post" enctype="multipart/form-data">
+        <label for="file">Select PDF:</label>
+        <input type="file" name="file" id="file" required>
+        <br><br>
+        <label for="query">Enter your query:</label>
+        <input type="text" name="query" id="query" required>
+        <br><br>
+        <input type="submit" value="Submit">
+    </form>
+    <h1>Relevant Content</h1>
+    <div class = "result">
+    {% if results %}
+        <ul>
+        {% for content in results %}
+            <li>{{ content }}</li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No relevant content found.</p>
+    {% endif %}
+    <a href="/">Clear</a>
+    </div>
+    </div>
+</body>
+</html>
