@@ -45,10 +45,10 @@ def text_extracting_function(pdf):
     text = ""
     doc = fitz.open(stream=pdf.read(), filetype="pdf")
     for page in doc:
-        text += page.get_text()
+        text += page.get_text('text')
     return text
 
-def retrieve_relevant_passages(text, query, top_n=5):
+def retrieve_relevant_passages(text, query, top_n=10):
     sentences = sent_tokenize(text)
     vectorizer = TfidfVectorizer(stop_words='english')
     tfidf_matrix = vectorizer.fit_transform(sentences + [query])
@@ -56,10 +56,11 @@ def retrieve_relevant_passages(text, query, top_n=5):
     ranked_sentences = [sentences[i] for i in similarities.argsort()[0][-top_n:]]
     return ranked_sentences
 
-def response_generation_func(relevant_passages):
-    response = "Based on your query, here are some relevant passages from the document:\n"
+def response_generation_func(relevant_passages, query):
+    response = f"Based on your query: '{query}', here is some relevant content from the document:"
+    print("\n")
     for passage in relevant_passages:
-        response += f"- {passage}\n"
+        response += f"\n{passage}\n"
     return response
 
 @app.route('/', methods=['GET', 'POST'])
@@ -74,7 +75,7 @@ def upload_file():
             query = request.form.get('query', '').lower()
             text_extract = text_extracting_function(file)
             relevant_passages = retrieve_relevant_passages(text_extract, query)
-            response = response_generation_func(relevant_passages)
+            response = response_generation_func(relevant_passages, query)
             return render_template('upload.html', results=[response])
     return render_template('upload.html')
 
