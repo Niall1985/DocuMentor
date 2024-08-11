@@ -48,13 +48,15 @@ def text_extracting_function(pdf):
         text += page.get_text('text')
     return text
 
-def retrieve_relevant_passages(text, query, top_n=4):
+def retrieve_relevant_passages(text, query, top_n=2):
     sentences = sent_tokenize(text)
     vectorizer = TfidfVectorizer(stop_words='english')
     tfidf_matrix = vectorizer.fit_transform(sentences + [query])
     similarities = cosine_similarity(tfidf_matrix[-1], tfidf_matrix[:-1])
-    ranked_sentences = [sentences[i] for i in similarities.argsort()[0][-top_n:]]
-    return ranked_sentences
+    relavant_index = similarities[0].argmax()
+    start_index = max(relavant_index - 1, 0)
+    end_index = min(relavant_index + top_n, len(sentences))
+    return sentences[start_index:end_index]
 
 def response_generation_func(relevant_passages, query):
     response = f"Based on your query: '{query}', here is some relevant content from the document:"
