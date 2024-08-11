@@ -56,7 +56,7 @@ def retrieve_relevant_passages(text, query, top_n=5):
     ranked_sentences = [sentences[i] for i in similarities.argsort()[0][-top_n:]]
     return ranked_sentences
 
-def generate_response(relevant_passages):
+def response_generation_func(relevant_passages):
     response = "Based on your query, here are some relevant passages from the document:\n"
     for passage in relevant_passages:
         response += f"- {passage}\n"
@@ -74,9 +74,10 @@ def upload_file():
             query = request.form.get('query', '').lower()
             text_extract = text_extracting_function(file)
             relevant_passages = retrieve_relevant_passages(text_extract, query)
-            response = generate_response(relevant_passages)
+            response = response_generation_func(relevant_passages)
             return render_template('upload.html', results=[response])
     return render_template('upload.html')
 
 if __name__ == "__main__":
     app.run(debug=True)
+
