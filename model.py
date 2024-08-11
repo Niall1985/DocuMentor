@@ -48,7 +48,7 @@ def text_extracting_function(pdf):
         text += page.get_text('text')
     return text
 
-def retrieve_relevant_passages(text, query, top_n=10):
+def retrieve_relevant_passages(text, query, top_n=3):
     sentences = sent_tokenize(text)
     vectorizer = TfidfVectorizer(stop_words='english')
     tfidf_matrix = vectorizer.fit_transform(sentences + [query])
@@ -81,4 +81,3 @@ def upload_file():
 
 if __name__ == "__main__":
     app.run(debug=True)
-
