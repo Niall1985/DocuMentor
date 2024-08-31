@@ -1,19 +1,23 @@
 import queue
 import threading
 from nltk.tokenize import sent_tokenize
-from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 import nltk
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sentence_transformers import SentenceTransformer
+import spacy
 from sklearn.metrics.pairwise import cosine_similarity
-import PyPDF2
-import string
-import time
+import fitz
+import numpy as np
+
 
 nltk.download('punkt')
 nltk.download('stopwords')
 nltk.download('wordnet')
 nltk.download('averaged_perceptron_tagger')
+
+nlp = spacy.load('en_core_web_sm')
+
+model = SentenceTransformer('all-MiniLM-L6-v2')
 
 input_queue = queue.Queue()
 output_queue = queue.Queue()
@@ -24,27 +28,48 @@ def input_string():
 
 def text_extracting_function(pdf_file):
     topic = input_queue.get() 
+    doc = fitz.open(pdf_file) 
+    content = ""
     
-    with open(pdf_file, 'rb') as file:
-        reader = PyPDF2.PdfReader(file)
-        content = ""
-        for page in reader.pages:
-            text = page.extract_text()
-            if topic in text:  
-                content += text
+    for page_num in range(len(doc)):
+        page = doc.load_page(page_num)  
+        text = page.get_text()  
+        if topic in text:  
+            content += text
+
+    if not content.strip():
+        print(f"Warning: No content extracted from {pdf_file}.")
+        output_queue.put("") 
+        return
     
-    output_queue.put(content)
+    sentences = sent_tokenize(content)
+
+    if not sentences:
+        print(f"Warning: No sentences found in {pdf_file}.")
+        output_queue.put("")
+        return
+    
+    query_embedding = model.encode([topic])
+    sentence_embedding = model.encode(sentences)
+
+
+    similarities = cosine_similarity(query_embedding, sentence_embedding)[0]
+    threshold = 0.5
+    relevant_sentences = [sentences[i] for i in np.argsort(similarities)[::-1] if similarities[i] > threshold]
+    relevent_content = ' '.join(relevant_sentences)
+
+    output_queue.put(relevent_content)
 
 def output_string():
     structured_content = ""
-    content  = output_queue.get()
     while True:
+        content  = output_queue.get()
         if content == "DONE":
             break
         structured_content += content + "\n"
     print("Final Structured output:\n",structured_content)
 
-pdf_files = []
+pdf_files = ['disease_information_data.pdf']
 
 threads = []
 
