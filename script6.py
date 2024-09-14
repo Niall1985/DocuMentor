@@ -1,4 +1,5 @@
 import fitz  
+import sys  
 from sentence_transformers import SentenceTransformer
 from sklearn.metrics.pairwise import cosine_similarity
 import numpy as np
@@ -6,6 +7,10 @@ import spacy
 import google.generativeai as genai
 from dotenv import load_dotenv
 import os
+import sys
+import io
+
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 
 load_dotenv()
@@ -45,28 +50,33 @@ def find_top_similar_chunks(query, chunks, top_n=4):
     return top_chunks, similarities[top_indices]
 
 
-def gemini_content(query, chunks):
+def gemini_content5(query, chunks):
     prompt_text = f"Document excerpt: {' '.join(chunks)}\nQuery: {query}"
     response = model1.generate_content(prompt_text)
     return response.text
 
 
+# This takes the first argument (query) passed from the Go program
+if len(sys.argv) > 1:
+    query5 = sys.argv[1]
+else:
+    query5 = input("Enter your query: ")  
 
-pdf_file_path = "#1.pdf"
-query = input("Enter your query: ")
+pdf_file_path = "#2.pdf"
 
 pdf_text = read_pdf_with_fitz(pdf_file_path)
 chunks = split_into_chunks(pdf_text)
 
-
-top_chunks, top_similarities = find_top_similar_chunks(query, chunks, top_n=1)
+top_chunks, top_similarities = find_top_similar_chunks(query5, chunks, top_n=1)
 print("Top Relevant Chunk(s):")
-for chunk, similarity in zip(top_chunks, top_similarities):
-    print(f"Chunk: {chunk}")
-    print(f"Similarity Score: {similarity:.2f}")
-    print()
+for chunk5, similarity5 in zip(top_chunks, top_similarities):
+    if similarity5>0.75:
+        print(f"Chunk: {chunk5}")
+        print(f"Similarity Score: {similarity5:.2f}")
+        print()
+    else:
+        print("No relevant content found")
 
-
-gemini_response = gemini_content(query, top_chunks)
+gemini_response5 = gemini_content5(query5, top_chunks)
 print("Gemini Enhanced Response:")
-print(gemini_response)
+print(gemini_response5)
