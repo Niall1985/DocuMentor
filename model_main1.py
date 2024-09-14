@@ -45,6 +45,7 @@ def find_top_similar_chunks(query, chunks, top_n=4):
     return top_chunks, similarities[top_indices]
 
 
+
 def gemini_content(query, chunks):
     prompt_text = f"Document excerpt: {' '.join(chunks)}\nQuery: {query}"
     response = model1.generate_content(prompt_text)
@@ -52,7 +53,7 @@ def gemini_content(query, chunks):
 
 
 
-pdf_file_path = "#1.pdf"
+pdf_file_path = "#2.pdf"
 query = input("Enter your query: ")
 
 pdf_text = read_pdf_with_fitz(pdf_file_path)
