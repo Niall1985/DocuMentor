@@ -13,7 +13,7 @@ import io
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
 load_dotenv()
-api_key = os.getenv('key')
+api_key = os.getenv('key1')
 genai.configure(api_key=api_key)
 model = genai.GenerativeModel('gemini-pro')
 
@@ -24,7 +24,10 @@ response4 = gemini_content5(query5, chunk5)
 response5 = gemini_content6(query6, chunk6)
 response6 = gemini_content7(query7, chunk7)
 
-final_prompt = f"Combine the responses from {response1},{response2}, {response3},{response4},{response5} and {response6}and modify it a bit, do not return it just like how it is in the pdf"
+combined_response = "\n".join([response1, response2, response3, response4, response5, response6])
+final_prompt = f"Combine the responses from {combined_response} and modify it a bit, do not return it just like how it is in the pdf and also keep only the relavant content"
+
+
 
 gemini_final_response = model.generate_content(final_prompt)
 

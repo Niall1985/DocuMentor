@@ -70,7 +70,7 @@ chunks = split_into_chunks(pdf_text)
 top_chunks, top_similarities = find_top_similar_chunks(query3, chunks, top_n=1)
 print("Top Relevant Chunk(s):")
 for chunk3, similarity3 in zip(top_chunks, top_similarities):
-    if similarity3>0.75:
+    if similarity3>0.70:
         print(f"Chunk: {chunk3}")
         print(f"Similarity Score: {similarity3:.2f}")
         print()
