@@ -67,12 +67,12 @@ import (
 )
 
 func runPythonScript(scriptPath string, input string) {
-	start := time.Now() // Start time for this script execution
+	start := time.Now()
 
 	cmd := exec.Command("python", scriptPath, input)
 	output, err := cmd.CombinedOutput()
 
-	elapsed := time.Since(start) // Time taken for this script execution
+	elapsed := time.Since(start)
 
 	if err != nil {
 		fmt.Printf("Error executing %s: %v\n", scriptPath, err)
@@ -88,7 +88,7 @@ func main() {
 	input, _ := reader.ReadString('\n')
 	input = input[:len(input)-1]
 
-	start := time.Now() // Start time for all script executions
+	start := time.Now()
 
 	runPythonScript("script1.py", input)
 	runPythonScript("script2.py", input)
