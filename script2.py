@@ -70,7 +70,7 @@ chunks = split_into_chunks(pdf_text)
 top_chunks, top_similarities = find_top_similar_chunks(query1, chunks, top_n=1)
 print("Top Relevant Chunk(s):")
 for chunk1, similarity1 in zip(top_chunks, top_similarities):
-    if similarity1>0.70:
+    if similarity1>0.65:
         print(f"Chunk: {chunk1}")
         print(f"Similarity Score: {similarity1:.2f}")
         print()
@@ -78,5 +78,5 @@ for chunk1, similarity1 in zip(top_chunks, top_similarities):
         print("No relevant content found")
 
 gemini_response1 = gemini_content1(query1, top_chunks)
-print("Gemini Enhanced Response:")
+print("Enhanced Response:")
 print(gemini_response1)

@@ -33,6 +33,6 @@ gemini_final_response = model.generate_content(final_prompt)
 
 print()
 print()
-print("Gemini Final Response:")
+print("Final Response:")
 print(gemini_final_response.text)
 

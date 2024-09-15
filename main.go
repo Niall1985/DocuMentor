@@ -9,10 +9,12 @@ import (
 )
 
 func runPythonScript(scriptPath string, input string, wg *sync.WaitGroup) {
+
 	defer wg.Done()
 
 	cmd := exec.Command("python", scriptPath, input)
 	output, err := cmd.CombinedOutput()
+
 	if err != nil {
 		fmt.Printf("Error executing %s: %v\n", scriptPath, err)
 	}
