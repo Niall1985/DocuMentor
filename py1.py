@@ -8,17 +8,14 @@ import numpy as np
 import spacy
 import io
 
-# Set stdout encoding to UTF-8 for proper character handling
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 
-# Suppress warnings temporarily
 with warnings.catch_warnings():
     warnings.simplefilter("ignore")
-    # Load necessary models
+   
     nlp = spacy.load('en_core_web_sm')
     model = SentenceTransformer('all-MiniLM-L6-v2')
 
-# Function to read PDF using PyMuPDF (fitz)
 def read_pdf_with_fitz(file_path):
     text = ""
     with fitz.open(file_path) as doc:
@@ -26,7 +23,6 @@ def read_pdf_with_fitz(file_path):
             text += page.get_text()
     return text
 
-# Function to split the text into chunks for easier processing
 def split_into_chunks(text, chunk_size=1000):
     chunks = []
     while len(text) > chunk_size:
@@ -38,7 +34,6 @@ def split_into_chunks(text, chunk_size=1000):
     chunks.append(text)
     return chunks
 
-# Function to find top N chunks based on cosine similarity with the query
 def find_top_similar_chunks(query, chunks, top_n=4):
     chunk_embeddings = model.encode(chunks)
     query_embedding = model.encode([query])
@@ -49,7 +44,6 @@ def find_top_similar_chunks(query, chunks, top_n=4):
     top_chunks = [chunks[index] for index in top_indices]
     return top_chunks, similarities[top_indices]
 
-# Function to process a single PDF file
 def process_pdf(file_path, query):
     pdf_text = read_pdf_with_fitz(file_path)
     chunks = split_into_chunks(pdf_text)
@@ -64,7 +58,6 @@ def process_pdf(file_path, query):
     
     return relevant_results
 
-# Main script to handle PDF reading and query processing
 def main():
     if len(sys.argv) > 1:
         query = sys.argv[1]
@@ -73,7 +66,7 @@ def main():
     
     pdf_file_path = "#1.pdf"
     
-    # Start timing after warning suppression
+  
     start_time = time.time()
 
     results = process_pdf(pdf_file_path, query)
@@ -81,7 +74,6 @@ def main():
     end_time = time.time()
     total_time = end_time - start_time
 
-    # Display top relevant chunks from the PDF
     print("Top Relevant Chunk(s) from the PDF:")
     for chunk in results:
         print(chunk)

@@ -95,9 +95,8 @@ func main() {
 	runPythonScript("py4.py", input)
 	runPythonScript("py5.py", input)
 	runPythonScript("py6.py", input)
-	// runPythonScript("main.py", input)
 
-	elapsed := time.Since(start) // Time taken for all scripts
+	elapsed := time.Since(start)
 
 	fmt.Println("All scripts executed successfully.")
 	fmt.Printf("Total execution time: %s\n", elapsed)
