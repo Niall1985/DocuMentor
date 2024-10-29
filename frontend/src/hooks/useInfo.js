@@ -15,3 +15,5 @@ const useInfo = () => {
   };
   return { loading, getInfo };
 };
+
+export default useInfo;
