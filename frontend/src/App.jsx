@@ -3,6 +3,7 @@ import UserEntry from "./components/userEntry";
 import WithoutThread from "./components/WithoutThread";
 import WithThread from "./components/WithThread";
 import { Toaster } from "react-hot-toast";
+import "bootstrap/dist/css/bootstrap.css";
 
 const App = () => {
   const [count, setCount] = useState(0);

@@ -1,43 +1,70 @@
+import { useContext, useState } from "react";
+import { InfoContext } from "../Context/InfoContext";
+import { FaArrowRight } from "react-icons/fa6";
+
 const WithThread = () => {
+  const [loading, setLoading] = useState(false);
+  const { infoMode, question } = useContext(InfoContext);
   return (
-    <div className="content">
-      <h1>With Threads</h1>
-      <div>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Nemo voluptates
-        possimus cupiditate similique, doloribus aliquam eaque saepe rem
-        consectetur magnam officiis sapiente, necessitatibus unde quisquam
-        perferendis quidem earum reiciendis suscipit. Maiores doloremque
-        consectetur iste aut recusandae quis numquam sunt dolor? Quo, temporibus
-        cumque facere dignissimos amet rem doloribus incidunt iste sed est,
-        enim, corporis magni ut quis fugiat maiores nemo. Officia consequuntur
-        inventore aliquam beatae vero ipsa rem voluptatem aspernatur vel non.
-        Quidem debitis quis ducimus officiis ipsam illo. Eaque tenetur excepturi
-        mollitia officiis tempora quaerat dignissimos dicta deserunt
-        necessitatibus? Vitae nihil in, eaque maiores aspernatur odio labore
-        saepe minus eum nam consequuntur expedita tempora? Est natus neque
-        tempora, maxime voluptatibus repellendus fugiat error accusantium. Ex
-        laudantium odit recusandae ipsa! Debitis minima nulla animi, quibusdam
-        nihil ratione consequuntur aliquam ducimus ea et ut. Magnam asperiores
-        blanditiis enim, exercitationem ipsa molestias libero sed, omnis
-        sapiente debitis voluptatibus expedita molestiae tenetur voluptatem! Hic
-        mollitia culpa dolor corrupti sed ipsum sapiente, delectus nesciunt
-        explicabo molestiae dolore rem adipisci aliquam voluptates perspiciatis!
-        Ipsam dolorum voluptatum, iste cum dolores tempora blanditiis
-        consequatur illo magnam. Non! Velit illum excepturi molestiae,
-        consequuntur repellendus nulla numquam quae omnis earum, doloribus
-        quisquam aliquam nobis natus explicabo blanditiis aperiam eos. Eum, aut.
-        Excepturi temporibus neque dolore! Sint iste recusandae repellat! Quam
-        sunt vitae ab consectetur tempora esse, modi fugit autem voluptatum,
-        veniam saepe sed temporibus ea! Eveniet voluptatem omnis nobis nemo
-        facere veritatis reiciendis corporis assumenda, enim nostrum ipsum
-        corrupti? Odio dolores id at, quo ratione laboriosam, magnam laborum
-        iste voluptatem voluptate distinctio, quidem eaque esse deleniti. Velit,
-        reiciendis illum, natus rerum, sapiente voluptates dicta magnam corporis
-        nihil quos doloremque. Accusamus voluptatum id at, quae sunt illum. Esse
-        repellat harum laboriosam tenetur, magni eveniet odit molestias deleniti
-        quibusdam, dolor temporibus enim non ex at ducimus aut ipsa tempora quo
-        debitis!
-      </div>
+    <div className={`content ${infoMode ? "" : "hide"}`}>
+      <h1
+        style={{
+          margin: "10px 20px 0 20px",
+          textAlign: "center",
+          marginBottom: "40px",
+        }}
+      >
+        With Threads
+      </h1>
+      <div style={{ marginLeft: "10px" }}>Q) {question}</div>
+      {loading ? (
+        <>
+          <div class="spinner-border spin" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <div style={{ marginLeft: "265px", fontSize: "20px" }}>
+            Fetching contents...
+          </div>
+        </>
+      ) : (
+        <div style={{ margin: "10px 20px 0 20px" }}>
+          <FaArrowRight /> Lorem ipsum dolor sit amet consectetur adipisicing
+          elit. Deleniti distinctio reprehenderit atque harum itaque voluptate
+          natus. Dolore cum aspernatur eveniet architecto? Laborum non veritatis
+          quo magni eveniet consequuntur sunt id. Temporibus fugiat corporis
+          culpa, commodi optio expedita libero qui ullam mollitia reiciendis,
+          dolor harum adipisci dolorum blanditiis praesentium alias ducimus nam
+          ut odio esse quasi ipsa similique explicabo? Eaque, voluptatibus!
+          Perferendis cum vel doloremque ad doloribus ratione similique
+          distinctio dolor pariatur eum voluptate voluptas optio tenetur autem
+          deserunt, nesciunt odio quod architecto debitis recusandae aspernatur.
+          Quaerat dignissimos minima sint illum. Quia, exercitationem officiis!
+          Est nam nisi iusto voluptates, neque praesentium perferendis
+          assumenda. Doloremque facilis facere numquam delectus recusandae,
+          corrupti placeat quidem, quas quasi earum voluptatibus sapiente nam
+          error atque reiciendis! Eaque quas voluptatibus, perferendis, impedit
+          a et aliquid dolorum fugiat numquam expedita reprehenderit labore,
+          quae provident vitae repellat reiciendis optio sunt quia dolores?
+          Maiores quaerat alias ad eveniet! Ducimus, error. Perferendis ab
+          doloribus iusto in a eaque laborum, iure accusamus, porro ut magnam
+          tenetur necessitatibus quasi beatae quidem neque. Optio repudiandae
+          ipsa magni inventore a adipisci sunt labore, dolorem vel? Dignissimos
+          veniam repellendus laudantium earum beatae laboriosam expedita fuga,
+          rem, fugiat eaque voluptate, eligendi cum ex minus voluptas totam
+          aspernatur doloribus sed? Dolor, laborum. Fuga nulla itaque ex quos
+          quasi? Doloremque amet vero autem necessitatibus sint accusamus
+          temporibus distinctio voluptatibus porro consequuntur eius dignissimos
+          natus aliquid commodi in saepe, ipsum officiis dolorem, illo
+          repellendus facere sapiente, quam recusandae! Vel, tempora. Omnis
+          expedita saepe earum consequuntur aliquid ipsa a recusandae nisi
+          tempora officiis laboriosam doloremque distinctio autem id nam
+          voluptatibus maxime ipsam corporis, odio exercitationem neque
+          architecto illo mollitia. Dolor, nobis! Quasi eaque at, omnis eos
+          optio dicta maiores iste placeat, ipsum quo nulla laboriosam id porro,
+          vitae repellat necessitatibus. Impedit ipsam quis perspiciatis error
+          tempora fuga, ea explicabo rerum libero?
+        </div>
+      )}
     </div>
   );
 };

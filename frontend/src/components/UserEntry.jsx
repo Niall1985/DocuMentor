@@ -1,9 +1,21 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
+import { InfoContext } from "../Context/InfoContext";
+import useInfo from "../hooks/useInfo";
 const UserEntry = () => {
   const [query, setQuery] = useState("");
+  const { setInfoMode, setQuestion } = useContext(InfoContext);
+  const { getInfo } = useInfo();
   const handleDivClick = (e) => {
     setQuery(e.target.innerText);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setQuestion(query);
+    // getInfo(query);
+    setQuery("");
+    setInfoMode(true);
   };
 
   return (
@@ -14,12 +26,16 @@ const UserEntry = () => {
         height: "240px",
       }}
     >
-      <h1 style={{ fontSize: "42px", textAlign: "center" }}>DocuMentor</h1>
-      <form style={{ position: "relative" }}>
+      <h1
+        style={{ fontSize: "42px", textAlign: "center", marginBottom: "35px" }}
+      >
+        DocuMentor
+      </h1>
+      <form style={{ position: "relative" }} onSubmit={handleFormSubmit}>
         <input
           placeholder="Enter the query..."
           style={{
-            height: "25px",
+            height: "45px",
             width: "300px",
             marginLeft: "600px",
           }}
@@ -28,7 +44,8 @@ const UserEntry = () => {
         ></input>
         <button
           style={{
-            height: "30px",
+            height: "46px",
+            width: "50px",
             zIndex: "1",
             position: "absolute",
             right: "39%",

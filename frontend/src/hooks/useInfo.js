@@ -11,7 +11,9 @@ const useInfo = () => {
     try {
       // API call to the multithreaded backend
       const multithreadedResponse = await fetch(
-        `http://localhost:8081/run-multithreaded?input=${encodeURIComponent(input)}`
+        `http://localhost:8081/run-multithreaded?input=${encodeURIComponent(
+          input
+        )}`
       );
       if (!multithreadedResponse.ok) {
         throw new Error("Multithreaded API call failed");
@@ -21,14 +23,15 @@ const useInfo = () => {
 
       // API call to the sequential backend
       const sequentialResponse = await fetch(
-        `http://localhost:8082/run-sequential?input=${encodeURIComponent(input)}`
+        `http://localhost:8082/run-sequential?input=${encodeURIComponent(
+          input
+        )}`
       );
       if (!sequentialResponse.ok) {
         throw new Error("Sequential API call failed");
       }
       const sequentialData = await sequentialResponse.json();
       setSequentialOutput(sequentialData.join("\n"));
-
     } catch (error) {
       toast.error("Internal Server Error: " + error.message);
     } finally {
