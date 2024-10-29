@@ -1,4 +1,3 @@
-// // with goroutines
 // package main
 
 // import (
@@ -54,18 +53,20 @@
 // 	fmt.Printf("Total execution time: %s\n", elapsed)
 // }
 
-// // // without go routines
 package main
 
 import (
-	"bufio"
+	"encoding/json"
 	"fmt"
-	"os"
+	"net/http"
 	"os/exec"
+	"sync"
 	"time"
 )
 
-func runPythonScript(scriptPath string, input string) {
+func runPythonScript(scriptPath string, input string, wg *sync.WaitGroup, results *[]string) {
+	defer wg.Done()
+
 	start := time.Now()
 
 	cmd := exec.Command("python", scriptPath, input)
@@ -76,28 +77,37 @@ func runPythonScript(scriptPath string, input string) {
 	if err != nil {
 		fmt.Printf("Error executing %s: %v\n", scriptPath, err)
 	}
-	fmt.Printf("Output from %s:\n%s\n", scriptPath, output)
-	fmt.Printf("Time taken for %s: %s\n", scriptPath, elapsed)
+	result := fmt.Sprintf("Output from %s:\n%s\nTime taken for %s: %s\n", scriptPath, output, scriptPath, elapsed)
+	*results = append(*results, result)
 }
 
-func main() {
-	reader := bufio.NewReader(os.Stdin)
+func handleMultithreaded(w http.ResponseWriter, r *http.Request) {
+	var wg sync.WaitGroup
+	input := r.URL.Query().Get("input")
 
-	fmt.Print("Enter query to pass to Python scripts: ")
-	input, _ := reader.ReadString('\n')
-	input = input[:len(input)-1]
+	wg.Add(6)
+	var results []string
 
 	start := time.Now()
 
-	runPythonScript("py1.py", input)
-	runPythonScript("py2.py", input)
-	runPythonScript("py3.py", input)
-	runPythonScript("py4.py", input)
-	runPythonScript("py5.py", input)
-	runPythonScript("py6.py", input)
+	// Run scripts concurrently
+	go runPythonScript("py1.py", input, &wg, &results)
+	go runPythonScript("py2.py", input, &wg, &results)
+	go runPythonScript("py3.py", input, &wg, &results)
+	go runPythonScript("py4.py", input, &wg, &results)
+	go runPythonScript("py5.py", input, &wg, &results)
+	go runPythonScript("py6.py", input, &wg, &results)
 
+	wg.Wait()
 	elapsed := time.Since(start)
 
-	fmt.Println("All scripts executed successfully.")
-	fmt.Printf("Total execution time: %s\n", elapsed)
+	// Add total time
+	results = append(results, fmt.Sprintf("Total execution time: %s\n", elapsed))
+	json.NewEncoder(w).Encode(results) // Send JSON response
+}
+
+func multithreaded() {
+	http.HandleFunc("/run-multithreaded", handleMultithreaded)
+	fmt.Println("Multithreaded server is running on http://localhost:8081")
+	http.ListenAndServe(":8081", nil)
 }
