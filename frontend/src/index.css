@@ -1,0 +1,21 @@
+.suggestions {
+  margin-left: 50px;
+  /* width: 300px; */
+  background-color: aqua;
+  padding: 8px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.suggestions:hover {
+  background-color: wheat;
+}
+
+.content {
+  width: 48%;
+  font-size: 20px;
+  border: 1px solid black;
+  /* margin: 10px; */
+  /* padding: 20px; */
+}
