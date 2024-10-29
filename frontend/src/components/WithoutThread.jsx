@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { InfoContext } from "../Context/InfoContext";
 import { FaArrowRight } from "react-icons/fa6";
 import useInfo from "../hooks/useInfo";
+import { IoGlobeSharp } from "react-icons/io5";
 
 const WithoutThread = () => {
   const [loading, setLoading] = useState(true);
@@ -19,7 +20,9 @@ const WithoutThread = () => {
         >
           Without Threads
         </h1>
-        <div style={{ marginLeft: "10px" }}>Q) {question}</div>
+        <div style={{ marginLeft: "10px" }}>
+          <IoGlobeSharp /> {question} <IoGlobeSharp />
+        </div>
         {loading ? (
           <>
             <div class="spinner-border spin" role="status">

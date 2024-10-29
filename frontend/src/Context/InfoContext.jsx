@@ -10,7 +10,18 @@ export const InfoContextProvider = ({ children }) => {
   const [textNoThread, setNoThread] = useState("");
   return (
     <InfoContext.Provider
-      value={{ infoMode, setInfoMode, text, setText, question, setQuestion }}
+      value={{
+        infoMode,
+        setInfoMode,
+        text,
+        setText,
+        question,
+        setQuestion,
+        textThread,
+        setTextThread,
+        textNoThread,
+        setNoThread,
+      }}
     >
       {children}
     </InfoContext.Provider>

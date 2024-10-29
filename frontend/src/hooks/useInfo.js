@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import toast from "react-hot-toast";
+import { InfoContext } from "../Context/InfoContext";
 
 const useInfo = () => {
   const [loading, setLoading] = useState(false);
   const [multithreadedOutput, setMultithreadedOutput] = useState("");
   const [sequentialOutput, setSequentialOutput] = useState("");
+  const { setTextThread, setNoThread } = useContext(InfoContext);
 
   const getInfo = async (input) => {
     setLoading(true);
@@ -20,7 +22,7 @@ const useInfo = () => {
       }
       const multithreadedData = await multithreadedResponse.json();
       setMultithreadedOutput(multithreadedData.join("\n"));
-
+      setTextThread(multithreadedOutput);
       // API call to the sequential backend
       const sequentialResponse = await fetch(
         `http://localhost:8082/run-sequential?input=${encodeURIComponent(
@@ -32,6 +34,7 @@ const useInfo = () => {
       }
       const sequentialData = await sequentialResponse.json();
       setSequentialOutput(sequentialData.join("\n"));
+      setNoThread(sequentialOutput);
     } catch (error) {
       toast.error("Internal Server Error: " + error.message);
     } finally {

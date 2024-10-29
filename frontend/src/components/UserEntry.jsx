@@ -2,6 +2,7 @@ import { useContext, useState } from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { InfoContext } from "../Context/InfoContext";
 import useInfo from "../hooks/useInfo";
+import toast from "react-hot-toast";
 const UserEntry = () => {
   const [query, setQuery] = useState("");
   const { setInfoMode, setQuestion } = useContext(InfoContext);
@@ -12,6 +13,17 @@ const UserEntry = () => {
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
+    if (!query) {
+      toast("Enter the Query??", {
+        icon: "👇",
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
+      return;
+    }
     setQuestion(query);
     // getInfo(query);
     setQuery("");
