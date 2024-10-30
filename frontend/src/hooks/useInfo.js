@@ -10,31 +10,39 @@ const useInfo = () => {
 
   const getInfo = async (input) => {
     setLoading(true);
+    setMultithreadedOutput(""); // Clear previous output
+    setSequentialOutput(""); // Clear previous output
+
     try {
       // API call to the multithreaded backend
-      const multithreadedResponse = await fetch(
-        `http://localhost:8081/run-multithreaded?input=${encodeURIComponent(
-          input
-        )}`
-      );
+      console.log(input)
+      const multithreadedResponse = await fetch(`http://localhost:9001/run-multithreaded?input=${encodeURIComponent(input)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!multithreadedResponse.ok) {
-        throw new Error("Multithreaded API call failed");
+        throw new Error("Multithreaded API call failed with status: " + multithreadedResponse.status);
       }
       const multithreadedData = await multithreadedResponse.json();
       setMultithreadedOutput(multithreadedData.join("\n"));
-      setTextThread(multithreadedOutput);
+      console.log(multithreadedOutput)
+      setTextThread(multithreadedData.join("\n")); // Use the actual data
+
       // API call to the sequential backend
-      const sequentialResponse = await fetch(
-        `http://localhost:8082/run-sequential?input=${encodeURIComponent(
-          input
-        )}`
-      );
+      const sequentialResponse = await fetch(`http://localhost:9002/run-sequential?input=${encodeURIComponent(input)}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!sequentialResponse.ok) {
-        throw new Error("Sequential API call failed");
+        throw new Error("Sequential API call failed with status: " + sequentialResponse.status);
       }
       const sequentialData = await sequentialResponse.json();
       setSequentialOutput(sequentialData.join("\n"));
-      setNoThread(sequentialOutput);
+      setNoThread(sequentialData.join("\n")); // Use the actual data
     } catch (error) {
       toast.error("Internal Server Error: " + error.message);
     } finally {

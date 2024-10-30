@@ -25,7 +25,7 @@ const UserEntry = () => {
       return;
     }
     setQuestion(query);
-    // getInfo(query);
+    getInfo(query);
     setQuery("");
     setInfoMode(true);
   };

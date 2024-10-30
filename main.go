@@ -1,4 +1,3 @@
-// main.go
 package main
 
 import (
@@ -10,6 +9,23 @@ import (
 	"time"
 )
 
+// CORS middleware
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:5173")
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+
+		// Handle preflight requests
+		if r.Method == http.MethodOptions {
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 // Sequential function to handle sequential execution
 func runSequentialPythonScript(scriptPath string, input string, results *[]string) {
 	start := time.Now()
@@ -20,18 +36,22 @@ func runSequentialPythonScript(scriptPath string, input string, results *[]strin
 	elapsed := time.Since(start)
 
 	if err != nil {
-		fmt.Printf("Error executing %s: %v\n", scriptPath, err)
+		fmt.Printf("Error executing %s: %v\nOutput: %s\n", scriptPath, err, string(output))
+	} else {
+		result := fmt.Sprintf("Output from %s:\n%s\nTime taken for %s: %s\n", scriptPath, string(output), scriptPath, elapsed)
+		*results = append(*results, result)
 	}
-	result := fmt.Sprintf("Output from %s:\n%s\nTime taken for %s: %s\n", scriptPath, output, scriptPath, elapsed)
-	*results = append(*results, result)
 }
 
 func handleSequential(w http.ResponseWriter, r *http.Request) {
 	input := r.URL.Query().Get("input")
 
+	fmt.Printf("Sequential handler received input: %s\n", input)
+
 	var results []string
 	start := time.Now()
 
+	// Run each Python script sequentially
 	runSequentialPythonScript("py1.py", input, &results)
 	runSequentialPythonScript("py2.py", input, &results)
 	runSequentialPythonScript("py3.py", input, &results)
@@ -42,13 +62,17 @@ func handleSequential(w http.ResponseWriter, r *http.Request) {
 	elapsed := time.Since(start)
 	results = append(results, fmt.Sprintf("Total execution time: %s\n", elapsed))
 
-	json.NewEncoder(w).Encode(results) // Send JSON response
+	json.NewEncoder(w).Encode(results)
 }
 
 func sequential() {
-	http.HandleFunc("/run-sequential", handleSequential)
-	fmt.Println("Sequential server is running on http://localhost:8082")
-	http.ListenAndServe(":8082", nil)
+	fmt.Println("Initializing sequential server...")
+	seqMux := http.NewServeMux()
+	seqMux.HandleFunc("/run-sequential", handleSequential)
+	err := http.ListenAndServe(":9002", corsMiddleware(seqMux)) // Apply CORS to sequential server
+	if err != nil {
+		fmt.Printf("Failed to start sequential server: %v\n", err)
+	}
 }
 
 // Multithreaded function to handle concurrent execution
@@ -63,16 +87,18 @@ func runPythonScript(scriptPath string, input string, wg *sync.WaitGroup, result
 	elapsed := time.Since(start)
 
 	if err != nil {
-		fmt.Printf("Error executing %s: %v\n", scriptPath, err)
+		fmt.Printf("Error executing %s: %v\nOutput: %s\n", scriptPath, err, string(output))
+	} else {
+		result := fmt.Sprintf("Output from %s:\n%s\nTime taken for %s: %s\n", scriptPath, string(output), scriptPath, elapsed)
+		*results = append(*results, result)
 	}
-	result := fmt.Sprintf("Output from %s:\n%s\nTime taken for %s: %s\n", scriptPath, output, scriptPath, elapsed)
-	*results = append(*results, result)
 }
 
 func handleMultithreaded(w http.ResponseWriter, r *http.Request) {
-	var wg sync.WaitGroup
 	input := r.URL.Query().Get("input")
+	fmt.Printf("Multithreaded handler received input: %s\n", input)
 
+	var wg sync.WaitGroup
 	wg.Add(6)
 	var results []string
 
@@ -91,16 +117,32 @@ func handleMultithreaded(w http.ResponseWriter, r *http.Request) {
 
 	// Add total time
 	results = append(results, fmt.Sprintf("Total execution time: %s\n", elapsed))
-	json.NewEncoder(w).Encode(results) // Send JSON response
+	json.NewEncoder(w).Encode(results)
+
+	fmt.Printf("Received request for multithreaded execution at: http://localhost:9001/run-multithreaded?input=%s\n", input)
 }
 
 func multithreaded() {
-	http.HandleFunc("/run-multithreaded", handleMultithreaded)
-	fmt.Println("Multithreaded server is running on http://localhost:8081")
-	http.ListenAndServe(":8081", nil)
+	fmt.Println("Initializing multithreaded server...")
+	mtMux := http.NewServeMux()
+	mtMux.HandleFunc("/run-multithreaded", handleMultithreaded)
+	err := http.ListenAndServe(":9001", corsMiddleware(mtMux)) // Apply CORS to multithreaded server
+	if err != nil {
+		fmt.Printf("Failed to start multithreaded server: %v\n", err)
+	}
 }
 
 func main() {
-	go sequential() // Start the sequential server in a goroutine
-	multithreaded() // Start the multithreaded server
+	// Start sequential and multithreaded servers
+	go sequential()
+	go multithreaded()
+
+	// Serve static files on main server (port 9000)
+	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./frontend/src/assets"))))
+
+	fmt.Println("Main server running on http://localhost:9000")
+	err := http.ListenAndServe(":9000", corsMiddleware(http.DefaultServeMux))
+	if err != nil {
+		fmt.Printf("Failed to start main server: %v\n", err)
+	}
 }

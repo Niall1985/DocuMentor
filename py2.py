@@ -80,7 +80,7 @@ def main():
     print("Top Relevant Chunk(s) from the PDF:")
     for chunk in results:
         print(chunk)
-    
+    print("\n")
     print(f"\nTime taken for processing: {total_time:.2f} seconds")
 
 if __name__ == "__main__":
