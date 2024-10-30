@@ -5,7 +5,7 @@ import useInfo from "../hooks/useInfo";
 import toast from "react-hot-toast";
 const UserEntry = () => {
   const [query, setQuery] = useState("");
-  const { setInfoMode, setQuestion } = useContext(InfoContext);
+  const { setInfoMode, setQuestion,setTextThread,setNoThread } = useContext(InfoContext);
   const { getInfo, getInfoWithoutThread } = useInfo();
   const handleDivClick = (e) => {
     setQuery(e.target.innerText);
@@ -24,11 +24,13 @@ const UserEntry = () => {
       });
       return;
     }
+    setNoThread("")
+    setTextThread("")
     setQuestion(query);
     getInfo(query);
     getInfoWithoutThread(query);
-    setQuery("");
     setInfoMode(true);
+    setQuery("");
   };
 
   return (
@@ -73,7 +75,7 @@ const UserEntry = () => {
         style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}
       >
         <div className="suggestions" onClick={handleDivClick}>
-          Latest technology used in agriculture
+        Advantages of Using Computer Application in Agriculture
         </div>
         <div className="suggestions" onClick={handleDivClick}>
           Latest technology used in agriculture2

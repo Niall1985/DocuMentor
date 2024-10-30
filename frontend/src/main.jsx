@@ -5,9 +5,9 @@ import App from "./App.jsx";
 import { InfoContextProvider } from "./Context/InfoContext.jsx";
 
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  // <StrictMode>
     <InfoContextProvider>
       <App />
     </InfoContextProvider>
-  </StrictMode>
+  /* </StrictMode> */
 );
