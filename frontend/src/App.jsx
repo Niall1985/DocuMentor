@@ -9,9 +9,8 @@ import { InfoContext } from "./Context/InfoContext";
 import useInfo from "./hooks/useInfo";
 
 const App = () => {
-  const [count, setCount] = useState(0);
   const { infoMode } = useContext(InfoContext);
-  const { loading } = useInfo();
+  const { loading, loading2 } = useInfo();
   // const [loading, setLoading] = useState(true);
 
   const time = "20ms";
@@ -31,7 +30,7 @@ const App = () => {
           <WithoutThread />
           <WithThread />
         </div>
-        {loading && infoMode ? (
+        {!loading && infoMode ? (
           <div
             style={{
               display: "flex",
@@ -42,6 +41,20 @@ const App = () => {
             }}
           >
             <Response time={time} />
+          </div>
+        ) : (
+          <></>
+        )}
+        {!loading2 && infoMode ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              paddingLeft: "20px",
+              paddingRight: "580px",
+              paddingTop: "5px",
+            }}
+          >
             <Response time={time} />
           </div>
         ) : (

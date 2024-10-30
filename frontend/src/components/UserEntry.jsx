@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 const UserEntry = () => {
   const [query, setQuery] = useState("");
   const { setInfoMode, setQuestion } = useContext(InfoContext);
-  const { getInfo } = useInfo();
+  const { getInfo, getInfoWithoutThread } = useInfo();
   const handleDivClick = (e) => {
     setQuery(e.target.innerText);
   };
@@ -26,6 +26,7 @@ const UserEntry = () => {
     }
     setQuestion(query);
     getInfo(query);
+    getInfoWithoutThread(query);
     setQuery("");
     setInfoMode(true);
   };

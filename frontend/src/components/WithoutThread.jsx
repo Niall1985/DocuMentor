@@ -5,9 +5,10 @@ import useInfo from "../hooks/useInfo";
 import { IoGlobeSharp } from "react-icons/io5";
 
 const WithoutThread = () => {
-  const [loading, setLoading] = useState(true);
-  // const { loading } = useInfo();
-  const { infoMode, setInfoMode, question } = useContext(InfoContext);
+  // const [loading, setLoading] = useState(true);
+  const { textNoThread } = useContext(InfoContext);
+  const { loading2 } = useInfo();
+  const { infoMode, question } = useContext(InfoContext);
   return (
     <>
       <div className={`content ${infoMode ? "" : "hide"}`}>
@@ -23,7 +24,7 @@ const WithoutThread = () => {
         <div style={{ marginLeft: "10px" }}>
           <IoGlobeSharp /> {question} <IoGlobeSharp />
         </div>
-        {loading ? (
+        {loading2 ? (
           <>
             <div class="spinner-border spin" role="status">
               <span class="visually-hidden">Loading...</span>

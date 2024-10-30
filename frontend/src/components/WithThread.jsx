@@ -4,7 +4,9 @@ import { FaArrowRight } from "react-icons/fa6";
 import { IoGlobeSharp } from "react-icons/io5";
 
 const WithThread = () => {
-  const [loading, setLoading] = useState(false);
+  const { loading } = useInfo();
+  const { textThread } = useContext(InfoContext);
+  // const [loading, setLoading] = useState(false);
   const { infoMode, question } = useContext(InfoContext);
   return (
     <div className={`content ${infoMode ? "" : "hide"}`}>
