@@ -1,19 +1,11 @@
-import { useContext, useState } from "react";
 import UserEntry from "./components/userEntry";
 import WithoutThread from "./components/WithoutThread";
 import WithThread from "./components/WithThread";
 import { Toaster } from "react-hot-toast";
 import "bootstrap/dist/css/bootstrap.css";
-import Response from "./components/Response";
-import { InfoContext } from "./Context/InfoContext";
-import useInfo from "./hooks/useInfo";
+import ResponseContainer from "./components/ResponeContainer";
 
 const App = () => {
-  const { infoMode } = useContext(InfoContext);
-  const { loading, loading2 } = useInfo();
-  // const [loading, setLoading] = useState(true);
-
-  const time = "20ms";
   return (
     <>
       <div
@@ -30,36 +22,7 @@ const App = () => {
           <WithoutThread />
           <WithThread />
         </div>
-        {!loading && infoMode ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              paddingLeft: "20px",
-              paddingRight: "580px",
-              paddingTop: "5px",
-            }}
-          >
-            <Response time={time} />
-          </div>
-        ) : (
-          <></>
-        )}
-        {!loading2 && infoMode ? (
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              paddingLeft: "20px",
-              paddingRight: "580px",
-              paddingTop: "5px",
-            }}
-          >
-            <Response time={time} />
-          </div>
-        ) : (
-          <></>
-        )}
+        <ResponseContainer/>
       </div>
       <Toaster />
     </>

@@ -78,7 +78,7 @@ const UserEntry = () => {
         Advantages of Using Computer Application in Agriculture
         </div>
         <div className="suggestions" onClick={handleDivClick}>
-          Latest technology used in agriculture2
+          How does drone technology assist us 
         </div>
         <div className="suggestions" onClick={handleDivClick}>
           Latest technology used in agriculture3

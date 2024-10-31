@@ -1,5 +1,5 @@
 const Response = ({ time }) => {
-  return <div>Response Time : {time}</div>;
+  return <div style={{fontSize:"18px"}}>{time}</div>;
 };
 
 export default Response;
