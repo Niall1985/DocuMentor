@@ -1,88 +1,160 @@
+Here's a detailed README for your **DocuMentor** project:
+
+---
+
 # DocuMentor
 
-This Flask application allows users to upload PDF files, enter queries, and retrieve relevant content from the uploaded PDFs. The application uses Natural Language Processing (NLP) techniques to search for the query within the text extracted from the PDF.
+DocuMentor is a tool designed to handle document analysis and retrieval with both multi-threaded and sequential processing. The application reads content from multiple PDF files, allowing users to query information either via a high-performance multi-threaded approach or a simpler sequential approach, with both modes delivering responses through a user-friendly web interface.
+
+## Table of Contents
+
+1. [Features](#features)
+2. [Project Structure](#project-structure)
+3. [Requirements](#requirements)
+   - [Go Requirements](#go-requirements)
+   - [Python Requirements](#python-requirements)
+   - [JavaScript Requirements](#javascript-requirements)
+4. [Installation](#installation)
+5. [Usage](#usage)
+6. [License](#license)
+
+---
 
 ## Features
 
-- Upload a PDF file.
-- Enter a query to search within the PDF.
-- Retrieve and display relevant sentences from the PDF based on the query.
+- Supports multi-threaded document processing for faster response times.
+- Simple sequential document processing for resource-constrained scenarios.
+- Frontend built with React to provide an intuitive user experience.
+- Allows users to switch between threaded and non-threaded modes and view relevant information from the uploaded documents.
+- Visual feedback for loading and error handling.
 
-## Prerequisites
+## Project Structure
 
-Before running the application, ensure you have the following installed:
+```
+DocuMentor/
+├── frontend/
+│   ├── node_modules/
+│   ├── public/
+│   └── src/
+│       ├── assets/
+│       ├── components/
+│       │   ├── Content.jsx
+│       │   ├── ResponseContainer.jsx
+│       │   ├── Response.jsx
+│       │   ├── UserEntry.jsx
+│       │   ├── WithoutThread.jsx
+│       │   └── WithThread.jsx
+│       ├── Context/
+│       ├── hooks/
+│       │   └── useInfo.js
+│       ├── App.jsx
+│       ├── index.css
+│       └── main.jsx
+├── mult/
+│   ├── #1.pdf
+│   ├── #2.pdf
+│   ├── #3.pdf
+│   ├── #4.pdf
+│   ├── #5.pdf
+│   └── #6.pdf
+├── seq/
+├── .env
+├── .gitignore
+├── debug.py
+├── go.mod
+├── LICENSE
+├── main.go
+├── py1.py
+├── py2.py
+├── py3.py
+├── py4.py
+├── py5.py
+├── py6.py
+├── test2.py
+├── README.md
+└── vite.config.js
+```
 
-- Python 3.x
-- Flask
-- PyMuPDF (fitz)
-- NLTK
+## Requirements
+
+### Go Requirements
+
+- **Go** (version 1.16 or later)
+  - The main Go file (`main.go`) provides backend APIs for handling multi-threaded and sequential document processing. Install Go by following the instructions [here](https://golang.org/doc/install).
+
+### Python Requirements
+
+- **Python** (version 3.7 or later)
+  - Install Python packages by running:
+    ```bash
+    pip install PyMuPDF, fitz, scikit-learn, Sentence Transformers, Warnings, numpy, spacy
+    ```
+  - **PyMuPDF** (`fitz`): For handling PDF processing.
+
+  
+  Each `pyX.py` file in the project is designed to handle a portion of the PDF processing tasks.
+
+### JavaScript Requirements
+
+- **Node.js** (version 14 or later)
+  - Install dependencies for the React frontend by running:
+    ```bash
+    npm install
+    ```
+  - Key dependencies:
+    - **React**: Used for building the frontend.
+    - **react-hot-toast**: For displaying notifications.
+    - **react-icons**: For including icons in the frontend.
+    - **Vite**: Bundler used for frontend development and building.
 
 ## Installation
 
-1. **Clone the repository** (or download the source code):
-
+1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/Niall1985/DocuMentor.git
-   cd <repository-directory>
+   git clone https://github.com/your-username/DocuMentor.git
+   cd DocuMentor
    ```
 
-2. **Install the required Python packages**:
+2. **Setup Go Backend:**
+   - Navigate to the root directory containing `main.go`.
+   - Run the Go server:
+     ```bash
+     go run main.go
+     ```
 
-   ```bash
-   pip install Flask PyMuPDF nltk
-   ```
+3. **Setup Python Scripts:**
+   - Ensure all Python dependencies are installed:
+     ```bash
+   pip install PyMuPDF, fitz, scikit-learn, Sentence Transformers, Warnings, numpy, spacy
+     ```
 
-3. **Download NLTK resources**:
-
-   The application uses NLTK for tokenization, lemmatization, and part-of-speech tagging. The necessary resources are automatically downloaded by the application, but you can also download them manually using:
-
-   ```python
-   import nltk
-   nltk.download('punkt')
-   nltk.download('stopwords')
-   nltk.download('wordnet')
-   nltk.download('averaged_perceptron_tagger')
-   ```
-
-## Running the Application
-
-1. **Run the Flask application**:
-
-   ```bash
-   python model.py
-   ```
-
-
-   Open your web browser and go to `http://127.0.0.1:5000/`.
+4. **Setup Frontend (React):**
+   - Navigate to the `frontend` directory.
+   - Install Node.js dependencies:
+     ```bash
+     npm install
+     ```
+   - Start the frontend:
+     ```bash
+     npm run dev
+     ```
 
 ## Usage
 
-1. **Upload a PDF**:
+1. **Starting the Application:**
+   - Run the backend services (Go and Python) as described in the installation steps.
+   - Start the frontend.
 
-   Click on the "Choose File" button to select a PDF file from your computer.
+2. **Navigating the UI:**
+   - Open your browser and go to `http://localhost:5173` to access the frontend.
+   - Enter your query in the input field.
+   - View responses in the response container and monitor for loading or error messages.
 
-2. **Enter a Query**:
-
-   Type your query into the input field and click "Submit."
-
-3. **View Results**:
-
-   The application will display relevant sentences from the uploaded PDF that match your query.
-
-## Code Overview
-
-- **`model.py`**: The main Flask application file.
-  - **`query_processor_function(query)`**: Processes the query using tokenization, stopwords removal, and lemmatization.
-  - **`text_extracting_function(pdf)`**: Extracts text from the uploaded PDF file.
-  - **`query_check_function(text, query_process)`**: Searches for relevant sentences in the extracted text based on the processed query.
-  - **`upload_file()`**: Handles file uploads, processes the query, and renders the results.
-
-- **`templates/upload.html`**: HTML template for uploading PDFs and displaying results.
-
-## Contributing
-
-Contributions are welcome! Please submit a pull request or open an issue for any suggestions or improvements.
+3. **Environment Variables:**
+   - Configure your `.env` file for any required environment variables.
 
 ## License
 
-This project is licensed under the GNU GENERAL PUBLIC LICENSE License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the GNU License.
+
+---
