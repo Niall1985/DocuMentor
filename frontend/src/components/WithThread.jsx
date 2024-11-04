@@ -90,7 +90,7 @@ const WithThread = () => {
   useEffect(() => {
     setLoading3(true);
     // setLoading(true)
-    // console.log(loading3,loading);
+    console.log(textThread);
     if (textThread) {
       // console.log(loading3,loading);
 
