@@ -18,7 +18,7 @@
 //     if (textNoThread) {
 //       // Match all occurrences of quoted strings
 //       const quotedContents = textNoThread.match(/"(.*?)"/g);
-      
+
 //       // Extract only the relevant quotes, removing the quotes themselves
 //       const relevantQuotes = quotedContents
 //         ? quotedContents
@@ -86,7 +86,7 @@ const WithoutThread = () => {
   const [loading2, setLoading2] = useState(true); // Initialize loading state
 
   useEffect(() => {
-    setLoading2(true)
+    setLoading2(true);
     if (textNoThread) {
       console.log("Processing textNoThread content");
       // Match all occurrences of quoted strings
@@ -96,24 +96,29 @@ const WithoutThread = () => {
       let match;
 
       while ((match = regex.exec(textNoThread)) !== null) {
-          // Trim whitespace and push the match to the array
-          array.push(match[1].trim());
+        // Trim whitespace and push the match to the array
+        array.push(match[1].trim());
       }
 
-      let cleanedArray = array.map(item => item.replace(/[\r\n]+/g, ' ').trim());
+      let cleanedArray = array.map((item) =>
+        item.replace(/[\r\n]+/g, " ").trim()
+      );
       // Display the resulting array
       console.log(cleanedArray);
 
-      const count = cleanedArray.filter(item => item.includes("No relevant content found")).length;
+      const count = cleanedArray.filter((item) =>
+        item.includes("No relevant content found")
+      ).length;
       // console.log(count)
-      if(count==6){
-        cleanedArray=["No relevant Data found"]
-      }else{
-        cleanedArray = cleanedArray.filter(item => !item.startsWith("No relevant content"));
-
+      if (count == 6) {
+        cleanedArray = ["No relevant Data found"];
+      } else {
+        cleanedArray = cleanedArray.filter(
+          (item) => !item.startsWith("No relevant content")
+        );
       }
-        setAnswer(cleanedArray); // Update the state with relevant quotes
-        setLoading2(false); // Set loading to false after processing
+      setAnswer(cleanedArray); // Update the state with relevant quotes
+      setLoading2(false); // Set loading to false after processing
     } else {
       // Handle case where textNoThread is empty or undefined
       setAnswer([]);
@@ -142,7 +147,7 @@ const WithoutThread = () => {
           <div className="spinner-border spin" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-          <div style={{ marginLeft: "265px", fontSize: "20px" }}>
+          <div style={{ marginLeft: "255px", fontSize: "20px" }}>
             Fetching contents...
           </div>
         </>

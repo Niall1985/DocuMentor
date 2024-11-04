@@ -11,7 +11,7 @@ const App = () => {
       <div
         style={{
           margin: "20px",
-          backgroundColor: "#FFDEAD",
+          backgroundColor: "rgb(205, 226, 226)",
           borderRadius: "20px",
           paddingTop: "6px",
           paddingBottom: "10px",
@@ -22,7 +22,7 @@ const App = () => {
           <WithoutThread />
           <WithThread />
         </div>
-        <ResponseContainer/>
+        <ResponseContainer />
       </div>
       <Toaster />
     </>

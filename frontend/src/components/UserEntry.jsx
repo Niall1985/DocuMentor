@@ -5,7 +5,8 @@ import useInfo from "../hooks/useInfo";
 import toast from "react-hot-toast";
 const UserEntry = () => {
   const [query, setQuery] = useState("");
-  const { setInfoMode, setQuestion,setTextThread,setNoThread } = useContext(InfoContext);
+  const { setInfoMode, setQuestion, setTextThread, setNoThread } =
+    useContext(InfoContext);
   const { getInfo, getInfoWithoutThread } = useInfo();
   const handleDivClick = (e) => {
     setQuery(e.target.innerText);
@@ -24,8 +25,8 @@ const UserEntry = () => {
       });
       return;
     }
-    setNoThread("")
-    setTextThread("")
+    setNoThread("");
+    setTextThread("");
     setQuestion(query);
     getInfo(query);
     getInfoWithoutThread(query);
@@ -36,7 +37,7 @@ const UserEntry = () => {
   return (
     <div
       style={{
-        marginTop: "40px",
+        marginTop: "20px",
         width: "100%",
         height: "240px",
       }}
@@ -51,8 +52,8 @@ const UserEntry = () => {
           placeholder="Enter the query..."
           style={{
             height: "45px",
-            width: "300px",
-            marginLeft: "600px",
+            width: "320px",
+            marginLeft: "580px",
           }}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -75,16 +76,16 @@ const UserEntry = () => {
         style={{ display: "flex", justifyContent: "center", marginTop: "40px" }}
       >
         <div className="suggestions" onClick={handleDivClick}>
-        Advantages of Using Computer Application in Agriculture
+          Advantages of Using Computer Application in Agriculture
         </div>
         <div className="suggestions" onClick={handleDivClick}>
-          How does drone technology assist us 
+          How does drone technology assist us
         </div>
         <div className="suggestions" onClick={handleDivClick}>
-          Latest technology used in agriculture3
+          What is a composite technology index
         </div>
         <div className="suggestions" onClick={handleDivClick}>
-          Latest technology used in agriculture4
+          Latest technology used in agriculture
         </div>
       </div>
     </div>
