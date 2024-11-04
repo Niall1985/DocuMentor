@@ -1,4 +1,4 @@
-import UserEntry from "./components/userEntry";
+import UserEntry from "./components/UserEntry";
 import WithoutThread from "./components/WithoutThread";
 import WithThread from "./components/WithThread";
 import { Toaster } from "react-hot-toast";

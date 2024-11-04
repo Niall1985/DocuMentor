@@ -7,6 +7,8 @@ import (
 	"runtime"
 	"sync"
 	"time"
+
+	"github.com/shirou/gopsutil/cpu"
 )
 
 func corsMiddleware(next http.Handler) http.Handler {
@@ -24,12 +26,20 @@ func corsMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-func getResourceUtilization() string {
+func getResourceUtilization() (string, string) {
 	var memStats runtime.MemStats
 	runtime.ReadMemStats(&memStats)
 
-	return fmt.Sprintf("Memory Usage: Alloc = %v MiB, TotalAlloc = %v MiB, Sys = %v MiB",
+	cpuUsage, err := cpu.Percent(0, false)
+	if err != nil {
+		cpuUsage = []float64{0}
+	}
+
+	memStatsStr := fmt.Sprintf("Memory Usage: Alloc = %v MiB, TotalAlloc = %v MiB, Sys = %v MiB",
 		memStats.Alloc/1024/1024, memStats.TotalAlloc/1024/1024, memStats.Sys/1024/1024)
+
+	cpuStatsStr := fmt.Sprintf("CPU Usage: %.2f%%", cpuUsage[0])
+	return memStatsStr, cpuStatsStr
 }
 
 func runPythonScript(scriptPath string, input string) (string, error) {
@@ -60,11 +70,12 @@ func handleSequential(w http.ResponseWriter, r *http.Request) {
 	}
 
 	elapsed := time.Since(start)
-	results = append(results, fmt.Sprintf("Total execution time: %s\n", elapsed))
 
-	resourceStats := getResourceUtilization()
-	results = append(results, resourceStats)
-	fmt.Printf("Sequential Resource Utilization: %s\n", resourceStats)
+	memStats, cpuStats := getResourceUtilization()
+	results = append(results, fmt.Sprintf("Total execution time: %s\n", elapsed))
+	results = append(results, memStats)
+	results = append(results, cpuStats)
+	fmt.Printf("Sequential Resource Utilization: %s, %s\n", memStats, cpuStats)
 
 	w.Header().Set("Content-Type", "text/plain")
 	for _, result := range results {
@@ -112,11 +123,12 @@ func handleMultithreaded(w http.ResponseWriter, r *http.Request) {
 	wg.Wait()
 	elapsed := time.Since(start)
 
+	memStats, cpuStats := getResourceUtilization()
 	results = append(results, fmt.Sprintf("Total execution time: %s\n", elapsed))
-	resourceStats := getResourceUtilization()
-	results = append(results, resourceStats)
+	results = append(results, memStats)
+	results = append(results, cpuStats)
 
-	fmt.Printf("Multithreaded Resource Utilization: %s\n", resourceStats)
+	fmt.Printf("Multithreaded Resource Utilization: %s, %s\n", memStats, cpuStats)
 
 	w.Header().Set("Content-Type", "text/plain")
 	for _, result := range results {
@@ -136,7 +148,6 @@ func multithreaded() {
 }
 
 func main() {
-
 	go sequential()
 	go multithreaded()
 

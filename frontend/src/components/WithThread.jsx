@@ -167,10 +167,10 @@ const WithThread = () => {
         <div style={{ margin: "10px 20px 0 20px" }}>
           <FaArrowRight />
           {answer.length === 0 ? (
-            <div></div> // Provide feedback when no content is found
+            <div></div> 
           ) : (
             answer.map((ans, index) => (
-              <Content key={index} quote={ans} /> // Render each quote
+              <Content key={index} quote={ans} />
             ))
           )}
         </div>
