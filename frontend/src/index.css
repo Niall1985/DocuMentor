@@ -1,15 +1,22 @@
+body {
+  background-color: #352f44;
+}
+
 .suggestions {
-  margin-left: 50px;
+  margin-left: 30px;
+  /* color: white; */
   /* width: 300px; */
-  background-color: aqua;
-  padding: 8px;
+  /* background-color: #8dc6ff; */
+
+  background-color: rgb(175, 196, 196);
+  padding: 9px;
   border-radius: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .suggestions:hover {
-  background-color: wheat;
+  background-color: #e3f6f5;
 }
 
 .content {

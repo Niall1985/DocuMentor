@@ -11,7 +11,7 @@
 //   const [answer, setAnswer] = useState([]);
 //   const [loading3, setLoading3] = useState(true); // Initialize loading state
 //   // console.log(textThread.split(" "))
-  
+
 //   useEffect(() => {
 //     if (textThread) {
 //       // const {loading}=useInfo()
@@ -20,7 +20,7 @@
 //       // Match all occurrences of quoted strings
 //       console.log("I am inside the function")
 //       const quotedContents = textThread.match(/"(.*?)"/g);
-      
+
 //       // Extract only the relevant quotes, removing the quotes themselves
 //       const relevantQuotes = quotedContents
 //         ? quotedContents
@@ -86,7 +86,6 @@ const WithThread = () => {
   const [answer, setAnswer] = useState([]);
   const [loading3, setLoading3] = useState(true); // Initialize loading state
   // const [loading,setLoading]=useState(true)
-  
 
   useEffect(() => {
     setLoading3(true);
@@ -94,10 +93,10 @@ const WithThread = () => {
     // console.log(loading3,loading);
     if (textThread) {
       // console.log(loading3,loading);
-      
+
       // Match all occurrences of quoted strings
       // const quotedContents = textThread.match(/"(.*?)"/g);
-      
+
       // // Extract only the relevant quotes, removing the quotes themselves
       // const relevantQuotes = quotedContents
       //   ? quotedContents
@@ -111,23 +110,29 @@ const WithThread = () => {
       let match;
 
       while ((match = regex.exec(textThread)) !== null) {
-          // Trim whitespace and push the match to the array
-          array.push(match[1].trim());
+        // Trim whitespace and push the match to the array
+        array.push(match[1].trim());
       }
 
-      let cleanedArray = array.map(item => item.replace(/[\r\n]+/g, ' ').trim());
+      let cleanedArray = array.map((item) =>
+        item.replace(/[\r\n]+/g, " ").trim()
+      );
       // Display the resulting array
       console.log(cleanedArray);
 
-      const count = cleanedArray.filter(item => item.includes("No relevant content found")).length;
+      const count = cleanedArray.filter((item) =>
+        item.includes("No relevant content found")
+      ).length;
       // console.log(count)
-      if(count==6){
-        cleanedArray=["No relevant Data found"]
-      }else{
-        cleanedArray = cleanedArray.filter(item => !item.startsWith("No relevant content"));
+      if (count == 6) {
+        cleanedArray = ["No relevant Data found"];
+      } else {
+        cleanedArray = cleanedArray.filter(
+          (item) => !item.startsWith("No relevant content")
+        );
       }
       setAnswer(cleanedArray); // Update the state with relevant quotes
-      console.log('heloooo')
+      console.log("heloooo");
       setLoading3(false); // Set loading to false after processing
       // setLoading(false); // Set loading to false after processing
       // console.log(loading3,loading)
@@ -159,7 +164,7 @@ const WithThread = () => {
           <div className="spinner-border spin" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
-          <div style={{ marginLeft: "265px", fontSize: "20px" }}>
+          <div style={{ marginLeft: "255px", fontSize: "20px" }}>
             Fetching contents...
           </div>
         </>
