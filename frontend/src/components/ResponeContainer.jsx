@@ -31,7 +31,7 @@ const ResponseContainer = () => {
     const memoryRegex = /Sys = (\d+) MiB/;
     const match = text.match(memoryRegex);
     if(match){
-      return "Memory Usage : "+match[1];
+      return "Memory Usage : "+match[1]+ "MiB";
     }
   }
 

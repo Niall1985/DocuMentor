@@ -3,7 +3,7 @@ const Response = ({ time,cpu,memory }) => {
     <>
     <div style={{fontSize:"18px"}}>{time}</div>
     <div style={{fontSize:"18px"}}>{cpu}</div>
-    <div style={{fontSize:"18px"}}>{memory} MiB</div>
+    <div style={{fontSize:"18px"}}>{memory}</div>
     </>
   )
   
